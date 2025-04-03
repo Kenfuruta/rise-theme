@@ -463,6 +463,17 @@
 
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+              {% if product.tags contains "badge-upload" %}
+                <div class="custom-image-upload" style="margin-bottom: 20px;">
+                  <label>画像をアップロードしてバッジを作ろう！</label><br>
+                  <input type="file" id="upload" accept="image/*" />
+                  <div style="margin-top:10px;">
+                    <img id="preview" style="max-width:100%; border: 1px solid #ccc;" />
+                  </div>
+                  <input type="hidden" name="properties[custom_image_url]" id="custom_image_url" />
+                  <button type="button" id="crop" style="margin-top: 10px;">この画像で注文する</button>
+                </div>
+              {% endif %}
               {%- when 'buy_buttons' -%}
                 {%- render 'buy-buttons',
                   block: block,
