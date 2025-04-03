@@ -2269,3 +2269,55 @@
   ]
 }
 {% endschema %}
+
+
+<script>
+  let cropper;
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const upload = document.getElementById('upload');
+    const preview = document.getElementById('preview');
+    const cropBtn = document.getElementById('crop');
+    const hiddenInput = document.getElementById('custom_image_url');
+
+    if (!upload || !cropBtn || !preview) return;
+
+    upload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        preview.src = reader.result;
+
+        if (cropper) cropper.destroy();
+
+        cropper = new Cropper(preview, {
+          aspectRatio: 1,
+          viewMode: 1,
+          movable: true,
+          zoomable: true,
+          rotatable: true,
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+
+    cropBtn.addEventListener('click', () => {
+      if (!cropper) return;
+
+      const canvas = cropper.getCroppedCanvas({
+        width: 500,
+        height: 500,
+      });
+
+      const imageData = canvas.toDataURL('image/png');
+
+      // Base64のまま渡すとサイズが大きくなるので、サーバー保存 or CDNに送る方が◎
+      // 今回はとりあえず hidden input に埋め込む（Shopifyが扱えるように）
+      hiddenInput.value = imageData;
+
+      alert('画像をトリミングして保存しました！カートに追加して注文できます。');
+    });
+  });
+</script>
