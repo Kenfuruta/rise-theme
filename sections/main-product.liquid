@@ -473,6 +473,11 @@
                   <input type="hidden" name="properties[custom_image_url]" id="custom_image_url" />
                   <button type="button" id="crop" style="margin-top: 10px;">この画像で注文する</button>
                 </div>
+                <!-- プレビュー表示エリア（hiddenじゃなく表示）を作る -->
+                <div id="cropped-preview-container" style="margin-top: 10px; display: none;">
+                  <p>仕上がりプレビュー：</p>
+                  <img id="cropped-preview" style="max-width: 100%; border: 1px solid #ccc;" />
+                </div>
               {% endif %}
               {%- when 'buy_buttons' -%}
                 {%- render 'buy-buttons',
