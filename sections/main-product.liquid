@@ -2306,18 +2306,30 @@
     cropBtn.addEventListener('click', () => {
       if (!cropper) return;
 
-      const canvas = cropper.getCroppedCanvas({
+      const croppedCanvas = cropper.getCroppedCanvas({
         width: 500,
         height: 500,
       });
 
-      const imageData = canvas.toDataURL('image/png');
+      // 🟢 円形マスクをかける
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const size = 500;
+      canvas.width = size;
+      canvas.height = size;
 
-      // Base64のまま渡すとサイズが大きくなるので、サーバー保存 or CDNに送る方が◎
-      // 今回はとりあえず hidden input に埋め込む（Shopifyが扱えるように）
+      // 円形にクリッピングして描画
+      ctx.beginPath();
+      ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.clip();
+
+      ctx.drawImage(croppedCanvas, 0, 0, size, size);
+
+      const imageData = canvas.toDataURL('image/png');
       hiddenInput.value = imageData;
 
-      alert('画像をトリミングして保存しました！カートに追加して注文できます。');
+      alert('円形にトリミングして保存しました！カートに追加して注文できます。');
     });
   });
 </script>
